@@ -8,10 +8,10 @@ export default function Layout({ children }: { children: React.ReactNode }) {
         <header className="flex justify-between items-center p-4 bg-pink-400 text-white">
           <div className="text-2xl font-bold">Polecajka.pl</div>
           <nav className="flex space-x-4">
-            <Link href="/products" className="hover:underline">
+            <Link href="/" className="hover:underline">
               Produkty
             </Link>
-            <Link href="/login" className="hover:underline">
+            <Link href="/account" className="hover:underline">
               Konto
             </Link>
           </nav>

@@ -79,12 +79,12 @@ export async function getUser(email: string) {
 }
 
 // Funkcja do tworzenia użytkownika w bazie danych
-export async function createUser(email: string, password: string) {
+export async function createUser(name: string, email: string, password: string) {
   const users = await ensureTableExists();
   let salt = genSaltSync(10);
   let hash = hashSync(password, salt);
 
-  return await db.insert(users).values({ email, password: hash });
+  return await db.insert(users).values({ name, email, password: hash });//orm przetłumaczenie sql na js
 }
 
 // Funkcja zapewniająca istnienie tabeli Users
@@ -100,6 +100,7 @@ async function ensureTableExists() {
     await client`
       CREATE TABLE IF NOT EXISTS "User" (
         id SERIAL PRIMARY KEY,
+        name VARCHAR(64) NOT NULL,
         email VARCHAR(64) UNIQUE NOT NULL,
         password VARCHAR(64) NOT NULL
       );
@@ -108,6 +109,7 @@ async function ensureTableExists() {
 
   const usersTable = pgTable('User', {
     id: serial('id').primaryKey(),
+    name: varchar('name', { length: 64 }),
     email: varchar('email', { length: 64 }),
     password: varchar('password', { length: 64 }),
   });

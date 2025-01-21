@@ -1,3 +1,4 @@
+// /app/page.tsx
 "use client";
 
 import Image from 'next/image';
@@ -26,25 +27,26 @@ export default function Home() {
 
   return (
     <Layout>
-      <h1 className="text-3xl font-bold mb-6">Witaj na Polecajka.pl</h1>
+      <h1 className="text-3xl font-bold mb-6">Tylko szczere opinie!</h1>
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
         {products.map((product: any) => (
-          <div key={product.id} className="border rounded p-4 shadow">
-            <Link href={`/products/${product.id}`}>
-              <div className="flex justify-center mb-4">
-                <Image
-                  src={product.image || '/default-image.jpg'}
-                  alt={product.name}
-                  height={300}
-                  width={300}
-                  className="rounded object-cover"
-                />
-              </div>
-            </Link>
-            <h2 className="text-xl font-semibold">{product.name}</h2>
-            <p className="text-gray-700">{product.description}</p>
-            <p className="text-yellow-500">Rating: {product.rating}</p>
-          </div>
+        <div key={product.id} className="border rounded p-4 shadow flex flex-col justify-between h-full">
+        <Link href={`/products/${product.id}`} className="flex justify-center">
+          <Image
+            src={product.image || '/default-image.jpg'}
+            alt={product.name}
+            height={200}
+            width={200}
+            className="rounded object-cover"
+          />
+        </Link>
+        <div className="mt-auto text-center">
+          <h2 className="text-xl font-semibold mt-2">{product.name}</h2>
+          <p className="text-gray-700 mt-1">{product.description}</p>
+          <p className="text-yellow-500 mt-2">Rating: {product.rating}</p>
+        </div>
+      </div>
+
         ))}
       </div>
     </Layout>
