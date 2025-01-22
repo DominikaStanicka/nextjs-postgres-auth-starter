@@ -21,7 +21,7 @@ export default function Register() {
     if (name.length < 3) {
       return 'Nazwa użytkownika musi zawierać co najmniej 3 litery.';
     }
-
+    
     // Walidacja: Sprawdzenie, czy hasło ma co najmniej 6 znaków
     if (password.length < 6) {
       return 'Hasło musi mieć co najmniej 6 znaków.';

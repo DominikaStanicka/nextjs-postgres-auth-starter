@@ -151,34 +151,35 @@ export default function ReviewForm() {
           <div className="flex space-x-4">
             <button
               type="submit"
-              className="flex-1 bg-pink-400 text-white font-bold py-2 px-4 rounded-md hover:bg-gray-800"
+              className="flex-1 bg-customBlue text-white font-bold py-2 px-4 rounded-md hover:opacity-90"
             >
               Dodaj recenzję
             </button>
             <button
               type="button"
               onClick={handleSaveToCookie}
-              className="flex-1 bg-blue-400 text-white font-bold py-2 px-4 rounded-md hover:bg-gray-800"
+              className="flex-1 bg-customPurple text-white font-bold py-2 px-4 rounded-md hover:opacity-90"
             >
               Zapisz recenzję
             </button>
             <button
               type="button"
               onClick={handleLoadFromCookie}
-              className="flex-1 bg-green-400 text-white font-bold py-2 px-4 rounded-md hover:bg-gray-800"
+              className="flex-1 bg-customViolet text-white font-bold py-2 px-4 rounded-md hover:opacity-90"
             >
               Wczytaj recenzję
             </button>
           </div>
+
         </form>
         {message && <p className="mt-4 text-center text-sm text-red-500">{message}</p>}
       </div>
       <div className="mt-10 flex justify-center">
         <button
             onClick={handleLogout}
-            className="w-full px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700"
+            className="w-full px-4 py-2 bg-gradient-to-r from-indigo-500 to-purple-600 text-white font-bold rounded-md hover:bg-purple-700"
         >
-            Log Out
+            Wyloguj się
         </button>
       </div>
     </Layout>
