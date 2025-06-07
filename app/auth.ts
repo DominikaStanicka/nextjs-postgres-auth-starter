@@ -1,3 +1,4 @@
+// app/auth.ts
 import NextAuth from 'next-auth';
 import Credentials from 'next-auth/providers/credentials';
 import { compare } from 'bcrypt-ts';
@@ -14,10 +15,13 @@ export const {
   providers: [
     Credentials({
       async authorize({ email, password }: any) {
-        let user = await getUser(email);
-        if (user.length === 0) return null;
-        let passwordsMatch = await compare(password, user[0].password!);
-        if (passwordsMatch) return user[0] as any;
+        const user = await getUser(email);
+        if (!user) throw new Error('Nieprawidłowy email lub hasło');
+
+        const passwordsMatch = await compare(password, user.password!);
+        if (!passwordsMatch) throw new Error('Nieprawidłowy email lub hasło');
+
+        return user as any;
       },
     }),
   ],

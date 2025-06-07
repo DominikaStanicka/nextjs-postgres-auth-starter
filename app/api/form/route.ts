@@ -4,6 +4,7 @@ import { ensureProductsTableExists, ensureReviewsTableExists } from '@/app/db';
 import postgres from 'postgres';
 import { drizzle } from 'drizzle-orm/postgres-js';
 import { eq } from 'drizzle-orm';
+import { auth } from 'app/auth';
 
 const client = postgres(process.env.POSTGRES_URL!);
 const db = drizzle(client);
@@ -11,10 +12,7 @@ const db = drizzle(client);
 export async function GET() {
   try {
     const productsTable = await ensureProductsTableExists();
-
-    // Pobierz listę produktów
     const products = await db.select().from(productsTable).execute();
-
     return NextResponse.json({ products });
   } catch (error) {
     console.error('Error fetching products:', error);
@@ -25,11 +23,25 @@ export async function GET() {
 export async function POST(request: Request) {
   try {
     const { product_id, rating, review } = await request.json();
-    const username = 'Anna'; 
+
+    // Walidacja 
+    if (
+      !Number.isInteger(rating) || rating < 1 || rating > 5 ||
+      typeof review !== 'string' || review.trim() === '' || review.length > 500
+    ) {
+      return NextResponse.json(
+        { error: 'Nieprawidłowe dane: sprawdź poprawność pola rating (1-5) i review (max 500 znaków)' },
+        { status: 400 }
+      );
+    }
+
+    const session = await auth();
+    const username = session?.user?.name || 'Anonim';
+
     const reviewsTable = await ensureReviewsTableExists();
     const productsTable = await ensureProductsTableExists();
-    
-    // Upewnij się, że produkt istnieje
+
+    // Sprawdź, czy produkt istnieje
     const productExists = await db
       .select()
       .from(productsTable)
@@ -43,7 +55,7 @@ export async function POST(request: Request) {
     // Dodaj recenzję do bazy
     await db.insert(reviewsTable).values({
       product_id,
-      user_name: username, 
+      user_name: username,
       rating,
       review,
     });

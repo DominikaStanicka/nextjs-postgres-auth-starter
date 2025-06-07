@@ -1,6 +1,6 @@
 // /app/db.ts
 import { drizzle } from 'drizzle-orm/postgres-js';
-import { pgTable, serial, varchar, numeric } from 'drizzle-orm/pg-core';
+import { pgTable, serial, varchar, numeric, integer } from 'drizzle-orm/pg-core';
 import { eq } from 'drizzle-orm';
 import postgres from 'postgres';
 import { genSaltSync, hashSync } from 'bcrypt-ts';
@@ -63,7 +63,7 @@ async function ensureReviewsTableExists() {
 
   const reviewsTable = pgTable('Reviews', {
     id: serial('id').primaryKey(),
-    product_id: serial('product_id').notNull(),
+    product_id: integer('product_id').notNull(),
     user_name: varchar('user_name', { length: 255 }),
     review: varchar('review', { length: 255 }),
     rating: numeric('rating', { precision: 2, scale: 1 }),
@@ -75,8 +75,10 @@ async function ensureReviewsTableExists() {
 // Funkcja do dodawania użytkownika do bazy danych
 export async function getUser(email: string) {
   const users = await ensureTableExists();
-  return await db.select().from(users).where(eq(users.email, email));
+  const result = await db.select().from(users).where(eq(users.email, email));
+  return result[0]; // ⬅️ tylko pierwszy użytkownik (albo undefined)
 }
+
 
 // Funkcja do tworzenia użytkownika w bazie danych
 export async function createUser(name: string, email: string, password: string) {
